@@ -5,6 +5,8 @@ const category = require('./app/controller/category.ctrl');
 // const favorites = require('./app/controller/favorites.ctrl');
 // const notification = require('./app/controller/notification.ctrl');
 // const ticket = require("./app/controller/ticket.ctrl");
+const product = require('./app/controller/product.ctrl');
+const review = require('./app/controller/review.ctrl');
 const { authJwt,dynamiclink } = require("./app/middlewares");
 const fs = require("fs");
 
@@ -45,10 +47,23 @@ module.exports = function(app) {
     app.post('/admin/insertCategory', category.insertCategory);
     app.post('/admin/updateCategory', category.updateCategory);
     app.post('/admin/deleteCategory', category.deleteCategory);
+
     app.get('/user/getAllParentCategory', category.getAllParentCategory);
     app.get('/user/getAllSubCategory', category.getAllSubCategory);
     app.get('/user/getSubCategoryByParentId', category.getSubCategoryByParentId);
 
+    // Product
+    app.post('/user/insertProduct', [authJwt.isUser], product.insertProduct);
+    app.post('/user/countViewProduct', [authJwt.isUser], product.countViewProduct);
+    app.post('/user/countUpvoteProduct',[authJwt.isUser], product.countUpvoteProduct);
+    app.get('/user/getAllProduct', product.getAllProduct);
+
+    // Review
+    app.post('/user/insertReview', [authJwt.isUser], review.insertReview)
+    app.get('/user/getAllReviewbyProduct', review.getAllReviewbyProduct);
+    app.post('/user/countViewReview', [authJwt.isUser], review.countViewReview );
+    app.post('/user/countUpvotereview', [authJwt.isUser], review.countUpvoteReview);
+    
     // app.post('/user/actionVidComments', [authJwt.isUser], videos.actionVidComments);
     // Function for Web
     app.post('/user/resetPassword', [authJwt.isResetPassword], user.resetPassword);
